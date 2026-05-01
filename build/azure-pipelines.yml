@@ -4,16 +4,8 @@ trigger:
 pool:
   vmImage: windows-latest
 
-parameters:
-  - name: location
-    type: string
-    default: 'northeurope'
-    values:
-      - uksouth
-      - northeurope
-
 variables:
-  - group: PlatformBuild
+  - group: PlatformIntegrationsBuild
 
 stages:
 - stage: BuildTest
@@ -29,44 +21,21 @@ stages:
       displayName: NuGet Restore
       inputs:
         command: 'restore'
-        projects: '**/GovUk.Forms.slnx'
+        projects: '**/Platform.Integrations.slnx'
 
     - task: DotNetCoreCLI@2
       displayName: 'Build Solution'
       inputs:
         command: 'build'
-        projects: '**/GovUk.Forms.slnx'
+        projects: '**/Platform.Integrations.slnx'
         arguments: '--configuration $(BuildConfiguration)'
           
     - task: DotNetCoreCLI@2
-      displayName: 'Run Tests'
-      inputs:
-        command: test
-        projects: '**/*Test/*.csproj'
-        arguments: '--configuration $(BuildConfiguration) --filter "FullyQualifiedName!~UI.Test"'
-
-    - task: DotNetCoreCLI@2
-      displayName: 'Publish HostApp'
+      displayName: 'Publish RPS Listener'
       inputs:
         command: 'publish'
         publishWebProjects: false
-        projects: '**/GovUk.Forms.HostApp.csproj'
-        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-
-    - task: DotNetCoreCLI@2
-      displayName: 'Publish Broker'
-      inputs:
-        command: 'publish'
-        publishWebProjects: false
-        projects: '**/Inss.Auth.Broker.csproj'
-        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-
-    - task: DotNetCoreCLI@2
-      displayName: 'Publish RPS Provider'
-      inputs:
-        command: 'publish'
-        publishWebProjects: false
-        projects: '**/Inss.Auth.RpsProvider.csproj'
+        projects: '**/Platform.Integrations.RpsListener.csproj'
         arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
     - task: PublishPipelineArtifact@1
@@ -75,16 +44,3 @@ stages:
         targetPath: '$(Build.ArtifactStagingDirectory)'
         artifactName: 'WebApps'
       condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-      
-- stage: DeployDev
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-  dependsOn: BuildTest
-  displayName: 'Deploy to Dev'
-  variables:
-    - group: Platform-Dev
-  jobs:
-    - template: ../deploy/azure-deployment.yml
-      parameters:
-        environment: 'Dev'
-        location: ${{ parameters.location }}
-        azureSubscription: $(AzureSubscription)
