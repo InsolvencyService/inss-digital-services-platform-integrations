@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/rps/">
+    <Project Path="src/rps/Platform.Integrations.RpsListener/Platform.Integrations.RpsListener.csproj" />
+    <Project Path="src/rps/Platform.Integrations.RpsMockSender/Platform.Integrations.RpsMockSender.csproj" />
+    <Project Path="src/rps/Platform.Integrations.RpsMockWader/Platform.Integrations.RpsMockWader.csproj" />
+  </Folder>
+</Solution>
