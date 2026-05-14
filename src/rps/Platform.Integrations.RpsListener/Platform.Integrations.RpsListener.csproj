@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Azure.Monitor.OpenTelemetry.AspNetCore" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
         <PackageReference Include="Microsoft.Azure.Relay" />
         <PackageReference Include="Swashbuckle.AspNetCore" />

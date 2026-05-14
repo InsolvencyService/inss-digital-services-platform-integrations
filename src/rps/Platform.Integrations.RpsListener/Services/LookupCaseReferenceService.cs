@@ -5,7 +5,7 @@ using Platform.Integrations.RpsListener.HostedServices;
 
 namespace Platform.Integrations.RpsListener.Services; 
 
-public class LookupCaseReferenceService
+public sealed class LookupCaseReferenceService
 {
     private readonly HttpClient _httpClient;
     private readonly IOptions<WaderOptions> _waderOptions;
@@ -24,19 +24,16 @@ public class LookupCaseReferenceService
         {
             _logger.CallingWaderApi(caseRefNumber);
 
-            string url = $"{_waderOptions.Value.BaseUrl}" +
-                $"{_waderOptions.Value.ReferenceEndpoint}/" +
-                $"{caseRefNumber}";
+            string url = $"{_waderOptions.Value.BaseUrl}{_waderOptions.Value.ReferenceEndpoint}/{caseRefNumber}";
 
-            HttpResponseMessage response =
-                await _httpClient.GetAsync(url, cancellationToken);
+            HttpResponseMessage response = await _httpClient.GetAsync(url, cancellationToken);
 
             _logger.WaderApiSuccess(caseRefNumber, response.StatusCode.ToString());
             return response.IsSuccessStatusCode;
         }
-        catch (Exception ex)
+        catch (Exception error)
         {
-            _logger.WaderApiFailed(ex, caseRefNumber);
+            _logger.WaderApiFailed(error, caseRefNumber);
             throw;
         }
     }
