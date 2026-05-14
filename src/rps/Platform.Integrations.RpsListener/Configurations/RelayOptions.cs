@@ -1,4 +1,5 @@
-﻿namespace Platform.Integrations.RpsListener.Configurations;
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Global - Config
+namespace Platform.Integrations.RpsListener.Configurations;
 
 public sealed class RelayOptions
 {

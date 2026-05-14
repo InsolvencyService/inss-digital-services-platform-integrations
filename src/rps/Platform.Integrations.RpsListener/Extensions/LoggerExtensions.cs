@@ -3,7 +3,6 @@ namespace Platform.Integrations.RpsListener.Extensions;
 
 public static partial class LoggerExtensions
 {
-
     // Startup and shutdown events...
     [LoggerMessage(
         EventId = 1001,
@@ -34,7 +33,7 @@ public static partial class LoggerExtensions
         EventId = 1005,
         Level = LogLevel.Information,
         Message = "Request received: {HttpMethod} {Url}.")]
-    public static partial void RelayRequestReceived(this ILogger logger, string HttpMethod, string Url);
+    public static partial void RelayRequestReceived(this ILogger logger, string httpMethod, string url);
 
     [LoggerMessage(
         EventId = 1006,
@@ -46,7 +45,7 @@ public static partial class LoggerExtensions
     EventId = 1007,
     Level = LogLevel.Information,
     Message = "Looking up case reference {CaseRefNumber} in Wader API.")]
-    public static partial void CallingWaderApi(this ILogger logger, string CaseRefNumber);
+    public static partial void CallingWaderApi(this ILogger logger, string caseRefNumber);
 
     [LoggerMessage(
     EventId = 1008,

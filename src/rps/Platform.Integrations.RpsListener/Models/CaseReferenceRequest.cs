@@ -2,5 +2,5 @@
 
 public class CaseReferenceRequest
 {
-    public string? CaseRefNumber { get; set; }
+    public string? CaseRefNumber { get; init; }
 }

@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace Platform.Integrations.RpsListener.Relay;
 
-public class RelayRequestProcessor
+public sealed class RelayRequestProcessor
 {
     private readonly ILogger<AzureRelayListenerService> _logger;
     private readonly RelayResponseWriter _responseWriter;
@@ -17,7 +17,10 @@ public class RelayRequestProcessor
 
     private static readonly JsonSerializerOptions _jsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
 
-    public RelayRequestProcessor(ILogger<AzureRelayListenerService> logger, RelayResponseWriter responseWriter, LookupCaseReferenceService lookupCaseReferenceService)
+    public RelayRequestProcessor(
+        ILogger<AzureRelayListenerService> logger, 
+        RelayResponseWriter responseWriter, 
+        LookupCaseReferenceService lookupCaseReferenceService)
     {
         _logger = logger;
         _responseWriter = responseWriter;
@@ -50,9 +53,9 @@ public class RelayRequestProcessor
                 exists ? HttpStatusCode.OK : HttpStatusCode.NotFound,
                 exists ? "Found" : "Not found");
         }
-        catch (Exception ex)
+        catch (Exception error)
         {
-            _logger.RelayRequestFailed(ex);
+            _logger.RelayRequestFailed(error);
 
             await _responseWriter.WriteResponseAsync(
                 context,

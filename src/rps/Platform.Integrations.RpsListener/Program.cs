@@ -1,3 +1,4 @@
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Platform.Integrations.RpsListener.Configurations;
 using Platform.Integrations.RpsListener.HostedServices;
 using Platform.Integrations.RpsListener.Relay;
@@ -12,6 +13,8 @@ builder.Services.AddOptions<WaderOptions>().Bind(builder.Configuration.GetSectio
 builder.Services.AddHttpClient<LookupCaseReferenceService>();
 builder.Services.AddSingleton<RelayRequestProcessor>();
 builder.Services.AddSingleton<RelayResponseWriter>();
+
+builder.Services.AddOpenTelemetry().UseAzureMonitor();
 
 WebApplication app = builder.Build();
 app.UseHealthChecks("/health");

@@ -46,10 +46,8 @@ static async Task RunAsync()
         }
         """;
 
-        using HttpRequestMessage request = new(HttpMethod.Post, uri)
-        {
-            Content = new StringContent(json, Encoding.UTF8, "application/json")
-        };
+        using HttpRequestMessage request = new(HttpMethod.Post, uri);
+        request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
         request.Headers.Add("ServiceBusAuthorization", token);
 
