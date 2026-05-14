@@ -1,12 +1,19 @@
-using Platform.Integrations.RpsListener;
+using Platform.Integrations.RpsListener.Configurations;
+using Platform.Integrations.RpsListener.HostedServices;
+using Platform.Integrations.RpsListener.Relay;
+using Platform.Integrations.RpsListener.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHostedService<AzureRelayListenerService>();
 builder.Services.AddHealthChecks();
 builder.Services.AddOptions<RelayOptions>().Bind(builder.Configuration.GetSection("Relay"));
 builder.Services.AddOptions<WaderOptions>().Bind(builder.Configuration.GetSection("Wader"));
 
-var app = builder.Build();
+builder.Services.AddHttpClient<LookupCaseReferenceService>();
+builder.Services.AddSingleton<RelayRequestProcessor>();
+builder.Services.AddSingleton<RelayResponseWriter>();
+
+WebApplication app = builder.Build();
 app.UseHealthChecks("/health");
 
 await app.RunAsync();

@@ -25,14 +25,22 @@ static async Task RunAsync()
         .Select(requestNumber =>
             SendReferenceCheckAsync(client, uri, token, requestNumber));
 
+    // Uncomment if you wish to see relay results in console app...
+    //Console.WriteLine("Waiting for the listener to start....");
+    //await Task.Delay(5000);
+
     await Task.WhenAll(tasks);
 
     Console.WriteLine("All requests finished.");
 
+    // Uncomment if you wish to see results in console app...
+    //Console.WriteLine("Press any key to exit...");
+    //Console.ReadKey();
+
     static async Task SendReferenceCheckAsync(HttpClient client, Uri uri, string token, int requestNumber)
     {
-        var incCaseRefNumber = $"CASE_REF{requestNumber:D3}";
-        var json = $$"""
+        string incCaseRefNumber = $"CASE_REF{requestNumber:D3}";
+        string json = $$"""
         {
             "caseRefNumber": "{{incCaseRefNumber}}"
         }
@@ -50,29 +58,4 @@ static async Task RunAsync()
 
         Console.WriteLine($"{requestNumber}: {(int)response.StatusCode} {response.StatusCode} - {body}");
     }
-
-
-    //var request = new HttpRequestMessage()
-    //{
-    //    RequestUri = uri,
-    //    Method = HttpMethod.Get
-    //};
-
-    // POST request with Case Reference Number as the JSON content....
-    //var request = new HttpRequestMessage(
-    //    HttpMethod.Post, uri)
-    //{
-    //    Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
-    //};
-
-    //request.Headers.Add("ServiceBusAuthorization", token);
-    
-    //var response = await client.SendAsync(request);
-    //var body = await response.Content.ReadAsStringAsync();
-
-    //Console.WriteLine($"Status Code: {response.StatusCode}");
-    //Console.WriteLine(body);
-
-    //Console.WriteLine(await response.Content.ReadAsStringAsync());
-    //Console.ReadLine();
 }

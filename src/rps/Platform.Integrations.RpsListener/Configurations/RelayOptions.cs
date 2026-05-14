@@ -1,4 +1,4 @@
-﻿namespace Platform.Integrations.RpsListener;
+﻿namespace Platform.Integrations.RpsListener.Configurations;
 
 public sealed class RelayOptions
 {
